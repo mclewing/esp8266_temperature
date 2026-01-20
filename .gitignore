@@ -1,0 +1,43 @@
+# ================= Arduino / ESP8266 GitIgnore =================
+
+# Arduino build folders
+/build/
+/*.bin
+/*.elf
+/*.hex
+/*.eep
+/*.map
+/*.eep.hex
+/*.eep.bin
+/*.ino.*.cpp
+/*.ino.*.h
+
+# PlatformIO build folders (falls später mal benutzt)
+.pio/
+.platformio/
+
+# MacOS specific
+.DS_Store
+
+# Windows specific
+Thumbs.db
+*.tmp
+
+# Local configuration
+config.h  # your secret config file, do NOT commit
+
+# Temporary files
+*.log
+*.bak
+*.swp
+*.swo
+*.zip
+*.tar.gz
+*.tar
+*.rar
+*.7z
+
+# Arduino Libraries / External libraries (optional)
+# You may include them via Library Manager instead of the repo
+/libraries/
+
