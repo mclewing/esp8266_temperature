@@ -30,7 +30,7 @@ Entwickelt für den dauerhaften Einsatz z. B. in Dojos, Trainingsräumen oder Te
 
 ---
 
-## Inbetriebnahme (Kurzfassung)
+## Inbetriebnahme
 
 1. **Push-Dienst vorbereiten**
 
@@ -75,7 +75,7 @@ Angezeigt werden u. a.:
 * IP-Adresse
 * Laufzeit (Uptime)
 
-Die Seite aktualisiert sich automatisch und wird bewusst **nicht gecacht**.
+Die Seite aktualisiert sich automatisch.
 
 ---
 
