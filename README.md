@@ -1,4 +1,4 @@
-# esp8266_temperature
+# esp8266_temperature - beware of vibe coding!
 
 Ein zuverlässiger WLAN-Temperaturmonitor auf Basis eines ESP8266 (NodeMCU) mit DS18B20-Sensor.
 Entwickelt für den dauerhaften Einsatz z. B. in Dojos, Trainingsräumen oder Technikräumen.
@@ -114,3 +114,82 @@ Keine Gewährleistung.
 ---
 
 Viel Erfolg beim Einsatz 🥋
+
+
+## Technical Description
+
+This project implements a standalone temperature monitoring system based on an ESP8266 microcontroller and a DS18B20 digital temperature sensor.
+
+### Hardware Architecture
+
+* **Microcontroller:** ESP8266 (e.g. NodeMCU / Wemos D1 mini)
+* **Temperature Sensor:** DS18B20 (1-Wire bus)
+* **User Interface:**
+
+  * Three LEDs (green / yellow / red) for local status indication
+  * One push button for long-press reset (WiFi configuration)
+* **Connectivity:** 2.4 GHz WiFi
+
+### Software Architecture
+
+The firmware is written using the Arduino framework for ESP8266 and follows a non-blocking, interval-based design.
+
+Main components:
+
+* **WiFiManager**
+
+  * Handles initial WiFi provisioning via captive portal
+  * Allows runtime configuration of temperature thresholds
+* **EEPROM**
+
+  * Persistent storage for warning and critical temperature thresholds
+  * Persistent storage of the last heartbeat timestamp
+* **Temperature Monitoring**
+
+  * Periodic measurement using DallasTemperature library
+  * Configurable measurement interval
+  * Immediate first measurement after boot
+* **State Machine**
+
+  * Three temperature states: OK, WARNING, CRITICAL
+  * State transitions trigger push notifications and LED updates
+* **Push Notifications**
+
+  * Uses ntfy.sh via HTTPS (WiFiClientSecure)
+  * Supports priorities for different message types
+  * Includes startup message, state changes, sensor errors, and daily heartbeat
+* **Web Status Interface**
+
+  * Embedded HTTP server on port 80
+  * Provides a minimal status page with current temperature, thresholds, state, IP and uptime
+  * HTTP headers and meta tags prevent caching
+  * Optional automatic refresh aligned with measurement interval
+* **Heartbeat Mechanism**
+
+  * Sends a daily “system alive” notification
+  * Timestamp stored in EEPROM to survive reboots
+* **Failsafe Behavior**
+
+  * Sensor disconnection triggers an immediate error notification
+  * Long button press (>3 seconds) resets WiFi credentials and reboots
+
+### Timing Model
+
+* All periodic actions are based on `millis()` timing
+* No blocking delays in the main loop (except short, controlled sensor stabilization delays)
+* First temperature measurement is executed immediately after startup
+
+### Security Considerations
+
+* No credentials or secrets are stored in the source code
+* Sensitive values (WiFi, ntfy topic, passwords) are externalized via a `config.h` file
+* `config.h` is excluded from version control via `.gitignore`
+* A `config.example.h` file documents required configuration parameters
+
+### Design Goals
+
+* High reliability with minimal complexity
+* Clear separation between configuration, logic, and presentation
+* Stable long-term unattended operation
+* Easy deployment and reproducibility
+
